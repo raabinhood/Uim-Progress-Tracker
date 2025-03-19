@@ -1,45 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Interactive UIM Progress Chart</title>
-    <style>
-        .progress-container { display: grid; grid-template-columns: repeat(5, 1fr); }
-        .gear-item { border: 1px solid #000; padding: 10px; text-align: center; cursor: pointer; }
-        .completed { background-color: green; color: white; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSRS UIM Progress Tracker</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>UIM Progress Tracker</h1>
-    <div id="gearGrid" class="progress-container"></div>
+    <h1>OSRS UIM Progress Tracker</h1>
 
-    <script>
-        const gearItems = ["Helmet", "Chestplate", "Leggings", "Boots", "Weapon"];
-        const grid = document.getElementById("gearGrid");
+    <!-- Tabs for different sections -->
+    <div class="tabs">
+        <button class="tablink" onclick="openTab(event, 'gear')">Gear</button>
+        <button class="tablink" onclick="openTab(event, 'skills')">Skills</button>
+        <button class="tablink" onclick="openTab(event, 'diaries')">Diaries</button>
+        <button class="tablink" onclick="openTab(event, 'quests')">Quests</button>
+    </div>
 
-        gearItems.forEach((item, index) => {
-            let div = document.createElement("div");
-            div.classList.add("gear-item");
-            div.innerText = item;
-            div.onclick = () => {
-                div.classList.toggle("completed");
-                saveProgress();
-            };
-            grid.appendChild(div);
-        });
+    <!-- Gear Progression -->
+    <div id="gear" class="tabcontent">
+        <h2>Gear Progression</h2>
+        <table id="gearTable">
+            <thead>
+                <tr>
+                    <th>Gear</th>
+                    <th>Tier 1</th>
+                    <th>Tier 2</th>
+                    <th>Tier 3</th>
+                    <th>Tier 4</th>
+                    <th>Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-item="helmet">
+                    <td><img src="https://oldschool.runescape.wiki/images/Serpentine_helm.png" alt="Helmet"></td>
+                    <td><input type="checkbox" data-tier="1"></td>
+                    <td><input type="checkbox" data-tier="2" disabled></td>
+                    <td><input type="checkbox" data-tier="3" disabled></td>
+                    <td><input type="checkbox" data-tier="4" disabled></td>
+                    <td><progress value="0" max="4"></progress></td>
+                </tr>
+                <tr data-item="chest">
+                    <td><img src="https://oldschool.runescape.wiki/images/Bandos_chestplate.png" alt="Chestplate"></td>
+                    <td><input type="checkbox" data-tier="1"></td>
+                    <td><input type="checkbox" data-tier="2" disabled></td>
+                    <td><input type="checkbox" data-tier="3" disabled></td>
+                    <td><input type="checkbox" data-tier="4" disabled></td>
+                    <td><progress value="0" max="4"></progress></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-        function saveProgress() {
-            const progress = Array.from(document.querySelectorAll(".gear-item")).map(el => el.classList.contains("completed"));
-            localStorage.setItem("uimProgress", JSON.stringify(progress));
-        }
+    <!-- Skills Progression -->
+    <div id="skills" class="tabcontent">
+        <h2>Skills Tracker</h2>
+        <div class="skill">
+            <label>Attack Level:</label>
+            <input type="number" id="attackLevel" min="1" max="99" value="1">
+            <progress id="attackProgress" value="1" max="99"></progress>
+        </div>
+        <div class="skill">
+            <label>Strength Level:</label>
+            <input type="number" id="strengthLevel" min="1" max="99" value="1">
+            <progress id="strengthProgress" value="1" max="99"></progress>
+        </div>
+    </div>
 
-        function loadProgress() {
-            const saved = JSON.parse(localStorage.getItem("uimProgress") || "[]");
-            document.querySelectorAll(".gear-item").forEach((el, i) => {
-                if (saved[i]) el.classList.add("completed");
-            });
-        }
+    <!-- Achievement Diaries -->
+    <div id="diaries" class="tabcontent">
+        <h2>Achievement Diaries</h2>
+        <h3>Varrock Diary</h3>
+        <input type="checkbox" id="varrockEasy"> Easy<br>
+        <input type="checkbox" id="varrockMedium"> Medium<br>
+        <input type="checkbox" id="varrockHard"> Hard<br>
+        <input type="checkbox" id="varrockElite"> Elite<br>
+    </div>
 
-        loadProgress();
-    </script>
+    <!-- Quests Tracker -->
+    <div id="quests" class="tabcontent">
+        <h2>Quest Progress</h2>
+        <input type="checkbox" id="dragonSlayer"> Dragon Slayer<br>
+        <input type="checkbox" id="monkeyMadness"> Monkey Madness<br>
+        <input type="checkbox" id="desertTreasure"> Desert Treasure<br>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
